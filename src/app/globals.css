@@ -15,81 +15,103 @@
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-.container {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  background-color: #f0f0f0;
+  height: 100vh;
+  background: linear-gradient(to bottom, #00C6FF, #0300A3);
+  padding: 0;
 }
 
-.login-box {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  max-width: 400px; 
-  display: flex;
-  flex-direction: column;
-  align-items: center; 
-  width: 90%; 
-  color: rgb(51 51 51);
+/* Container principal branco */
+.container {
+  width: 95%;
+  height: 95vh;
+  max-width: 1400px;
+  background: white;
   border-radius: 20px;
-  animation: svelte-y2tngj-initializeBackground 2s ease-in-out forwards;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
 }
 
-.login-box h2 {
+/* Logo*/
+.logo {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 30px;
+  height: 30px;
+}
+
+.logo-section {
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937; 
   text-align: center;
-  margin-bottom: 20px;
-  font-size: 1.5rem;
-  line-height: 2rem;
 }
 
-.login-form {
-  width: 100%;   
-}
 
-.input-group {
-  margin-bottom: 15px;
+/* Formulário centralizado */
+.form-box {
   width: 100%;
+  max-width: 400px;
+  text-align: center;
 }
 
-.input-group label {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.input-group input {
+/* Inputs */
+input {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
+  margin: 10px 0;
   border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box; 
+  border-radius: 5px;
+  font-size: 16px;
 }
 
+/* Botão de login */
 button {
   width: 100%;
-  padding: 10px;
-  background-color: #0070f3;
-  color: #fff;
+  padding: 12px;
   border: none;
-  border-radius: 4px;
+  background: blue;
+  color: white;
+  font-size: 18px;
+  border-radius: 10px;
   cursor: pointer;
-  box-sizing: border-box;
+  transition: background 0.3s ease;
 }
 
+button:hover {
+  background: darkblue;
+}
+
+/* Responsividade */
 @media (max-width: 768px) {
-  .login-box {
-    width: 90%; 
-    padding: 15px;
+  .container {
+      width: 100%;
+      height: 100vh;
+      border-radius: 0;
   }
 
-  .login-box h2 {
-    font-size: 1.5em;
+  .form-box {
+      width: 90%;
+  }
+}
+
+@media (max-width: 480px) {
+  h2 {
+      font-size: 20px;
+  }
+
+  input, button {
+      font-size: 14px;
+      padding: 10px;
   }
 }
