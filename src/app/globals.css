@@ -14,6 +14,8 @@
   }
 }
 
+/* CSS LOGIN */
+
 body {
   width: 100vw;
   margin: 0;
@@ -21,14 +23,12 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(to bottom, #00C6FF, #0300A3);
+  background: linear-gradient(to bottom, #01d1fd, #2e04ff);
 }
-
-/* CSS LOGIN */
 
 /* Container principal branco */
 .container {
-  width: 90%;
+  width: 95%;
   height: 95vh;
   max-width: 1920px;
   background: white;
@@ -39,6 +39,17 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   position: relative;
   padding: 40px;
+}
+
+/* Área de Conteúdo */
+.content {
+  width: 100%;
+  max-width: 400px;
+  text-align: left;
+  font-weight: 400;
+  font-size:.875rem;
+  line-height:1.25rem;
+  margin-bottom:.25rem;
 }
 
 /* Logo*/
@@ -68,33 +79,37 @@ body {
   width: 100%;
   max-width: 400px;
   text-align: center;
+  
 }
 
 /* Inputs */
 input {
   width: 100%;
-  padding: 12px;
+  padding: .75rem 1.25rem;
   margin: 10px 0;
   border: 1px solid #ccc;
-  border-radius: 20px;
+  border-radius: 1rem;
   font-size: .75rem;
+  border-color: rgb(204 204 204 / var(--tw-border-opacity));;
+  --tw-border-opacity: 1;
+  border-width: 1px;
+  box-sizing: border-box;
 }
 
 /* Botão de login */
 button {
   width: 100%;
-  padding: 12px;
+  padding: .75rem;
   border: none;
   background: blue;
   color: white;
-  font-size: 18px;
-  border-radius: 10px;
+  font-size: .875rem;
+  line-height:1.25rem;
+  border-radius: 1rem;
+  font-weight:500;
   cursor: pointer;
   transition: background 0.3s ease;
-}
-
-button:hover {
-  background: darkblue;
+  background: #2f00fe;
 }
 
 /* Responsividade */
