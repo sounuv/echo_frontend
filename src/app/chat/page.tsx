@@ -10,7 +10,6 @@ export default function Home() {
       {/* Sidebar */}
       <aside className="sidebar">
         <div className="sidebar-header">
-          <Menu size={22} className="icon" />
           <span className="sidebar-title">Heart - OpenAI</span>
           <Plus size={20} className="icon" />
         </div>
@@ -18,10 +17,8 @@ export default function Home() {
       </aside>
 
       {/* Main Content */}
-      <main className="content">
-        <h1 className="title">
-          HEART</h1>
-
+      <main className="content-chat">
+        <h1 className="title-chat">ECHO</h1>
         <div className="search-bar">
           <button className="search-btn">
             <Plus size={16} />
