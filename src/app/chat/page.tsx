@@ -21,8 +21,7 @@ export default function Home() {
         <h1 className="title-chat">ECHO</h1>
         <div className="search-bar">
           <button className="search-btn">
-            <Plus size={16} />
-          </button>
+a          </button>
           <input
             type="text"
             className="search-input"

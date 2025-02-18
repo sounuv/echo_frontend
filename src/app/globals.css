@@ -147,10 +147,15 @@ button {
 }
 
 .sidebar-header {
+  font-weight: 500;
+  font-size: 1.25rem;
+  line-height:;
+  margin-bottom: 1.5rem;
+  position: absolute;
+  top: 1rem;
+  left: 2rem;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-weight: 600;
+  gap: 1rem; 
 }
 
 .sidebar-title {
@@ -158,21 +163,20 @@ button {
 }
 
 .sidebar-subtitle {
-  font-size: 0.875rem;
+  font-size: 0.725rem;
   color: var(--gray-dark);
-  margin-top: 0.25rem;
+  position: absolute;
+  /* font-weight: 500; */
+  line-height:;
+  margin-bottom: 1.5rem;
+  position: absolute;
+  top: 3rem;
+  left: 2rem;
+  display: flex;
+  gap: 1rem; 
 }
 
 /* Main Content */
-.content-chat {
-  flex: 1;
-  background-color: white;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
 
 .title-chat {
   font-size: 4rem;
@@ -182,7 +186,7 @@ button {
 }
 
 .title-highlight {
-  position: relative;
+  position: center;
   color: var(--blue-dark);
   font-weight: bold;
 }
@@ -201,17 +205,14 @@ button {
 }
 
 .search-btn {
-  background: none;
+  background: grey;
   border: none;
   cursor: pointer;
-  margin-right: 8px;
 }
 
 .search-input {
-  flex: 1;
-  border: none;
-  outline: none;
-  background: grey;
+  justify-content:center; 
+  align-items:center;
 }
 
 /* Suggestions */
@@ -230,6 +231,7 @@ button {
   display: flex;
   gap: 1rem;
   margin-top: 0.5rem;
+  background: grey;
 }
 
 .suggestion-btn {
