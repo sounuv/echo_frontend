@@ -194,7 +194,7 @@ button {
 .search-bar {
   display: flex;
   align-items: center;
-  border-radius: 1rem;
+  /* border-radius: 1rem; */
   padding: 0.5rem 1rem;
   width: 100%;  
   max-width: 600px;
@@ -210,19 +210,44 @@ button {
   padding: 0.85rem;
   font-size: 0.75rem;
   background:#ececec;
+  padding-left: 50px; 
+  position: relative;
 }
 
 .search-icon {
   position: absolute;
-  right: 16rem; 
   background: none;
   border: none;
   cursor: pointer;
   color: #666;
   display: flex;
   align-items: center;
-  justify-content: center;
-  
+  justify-content: left;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.search-bar .absolute {
+  left: 20;
+  width:auto;  
+  border-radius:1rem;
+  /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
+  z-index: 10;
+}
+
+.search-bar .absolute button {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  text-align: left;
+  border: none;
+  cursor: pointer;
+  background:#ececec;
+  color: #333;
+}
+
+.search-bar .absolute button:hover {
+  background-color: #f0f0f0;
 }
 
  .icon {
