@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* CSS LOGIN */
-
 body {
   width: 100vw;
   margin: 0;
@@ -29,6 +27,8 @@ body {
   padding: 40px;
 }
 
+/* CSS LOGIN */
+
 /* Área de Conteúdo */
 .content {
   width: 100%;
@@ -40,7 +40,6 @@ body {
   margin-bottom:.25rem;
 } 
 
-/* Logo*/
 .logo {
   position: absolute;
   top: 20px;
@@ -61,15 +60,12 @@ body {
   text-align: center;
 }
 
-/* Formulário centralizado */
 .form-box {
   width: 100%;
   max-width: 400px;
   text-align: center;
-  
 }
 
-/* Inputs */
 input {
   width: 100%;
   padding: .75rem 1.25rem;
@@ -83,7 +79,6 @@ input {
   box-sizing: border-box;
 }
 
-/* Botão de login */
 button {
   width: 100%;
   padding: .75rem;
@@ -144,20 +139,6 @@ button {
 
 /* CSS CHAT */
 
-.container {
-  width: 95%;
-  height: 95vh;
-  max-width: 1920px;
-  background: white;
-  border-radius: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  position: relative;
-  padding: 40px;
-}
-
 .sidebar-header {
   align-items:center;
   display: flex;
@@ -186,8 +167,6 @@ button {
   gap: 1rem; 
 }
 
-/* Main Content */
-
 .content-chat {
   flex: 1rem;
   display: flex;
@@ -210,7 +189,6 @@ button {
   font-weight: bold;
 } */
 
-/* Search Bar */
 .search-bar {
   display: flex;
   align-items: center;
@@ -242,14 +220,7 @@ button {
   color: #444;
 }
 
- .icon {
-  color:#444;
-  margin-left: 10px;
-  cursor:pointer;
- }
-
-/* Suggestions */
-.suggestions {
+ .suggestions {
   margin-top: 1.5rem;
   text-align: left;
   width: 100%;
@@ -303,11 +274,91 @@ button {
   margin-top:0.3rem;
 }
 
-/* Top Icons */
 .top-icons {
   position: absolute;
   top: 1rem;
   right: 1rem;
   display: flex;
   gap: 1rem;
+}
+
+.icon {
+  color:#444;
+  margin-left: 10px;
+  cursor:pointer;
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  transition: transform 0.2s ease-in-out;
+ }
+
+ .icon:hover {
+  transform: scale(1.1);
+}
+
+.dropdown {
+  position: absolute;
+  top: 45px;
+  right: 0;
+  background: #ececec;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  width: 180px;
+  padding: 10px 0;
+  display: flex;
+  flex-direction: column;
+  z-index: 1000; 
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 15px;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+  font-size: 14px;
+}
+
+.dropdown-item:hover {
+  background: #ddd;
+}
+
+.dropdown-icon {
+  color: #555;
+}
+
+@media (max-width: 768px) {
+  .top-icons {
+    top: 8px;
+    right: 10px;
+  }
+
+  .icon {
+    width: 40px;
+    height: 40px; 
+  }
+
+  .dropdown {
+    width: 160px;
+    top: 50px;
+    right: 5px;
+  }
+
+  .dropdown-item {
+    font-size: 13px; 
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dropdown {
+    width: 150px; 
+    right: 2px;
+  }
+
+  .dropdown-item {
+    font-size: 12px;
+    padding: 8px;
+  }
 }

@@ -1,12 +1,12 @@
 "use client";
 import { useState } from "react";
-import { Menu, Plus, Mic, Headphones, Search, Settings, User } from "lucide-react";
-import { Zap } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Mic, Zap, Settings, LogOut } from "lucide-react";
 
 export default function Home() {
   const [search, setSearch] = useState("");
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [searchWebActive, setSearchWebActive] = useState(false);
+  const router = useRouter();
 
   const handleSuggestionClick = (text: string) => {
     setSearch(text);
@@ -29,7 +29,7 @@ export default function Home() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          <Mic size={20} className="input-icon"/>
+          <Mic size={20} className="input-icon" />
         </div>
         <div className="suggestions">
           <span className="suggestions-title">
@@ -49,9 +49,25 @@ export default function Home() {
           </div>
         </div>
       </main>
-      <div className="top-icons">
-        <Settings className="icon" />
-        <User className="icon" />
+      <div className="top-icons relative">
+        <img
+          className="icon cursor-pointer"
+          src="./user.png"
+          alt="User"
+          onClick={() => setDropdownOpen(!dropdownOpen)}
+        />
+        {dropdownOpen && (
+          <div className="dropdown">
+            <div className="dropdown-item">
+              <Settings size={16} className="dropdown-icon" />
+              Configurações
+            </div>
+            <div className="dropdown-item" onClick={() => router.push("/")}>  
+              <LogOut size={16} className="dropdown-icon" />
+              Sair
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
