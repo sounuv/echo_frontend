@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* CSS LOGIN */
-
 body {
   width: 100vw;
   margin: 0;
@@ -29,6 +27,8 @@ body {
   padding: 40px;
 }
 
+/* CSS LOGIN */
+
 /* Área de Conteúdo */
 .content {
   width: 100%;
@@ -40,7 +40,6 @@ body {
   margin-bottom:.25rem;
 } 
 
-/* Logo*/
 .logo {
   position: absolute;
   top: 20px;
@@ -61,15 +60,12 @@ body {
   text-align: center;
 }
 
-/* Formulário centralizado */
 .form-box {
   width: 100%;
   max-width: 400px;
   text-align: center;
-  
 }
 
-/* Inputs */
 input {
   width: 100%;
   padding: .75rem 1.25rem;
@@ -83,7 +79,6 @@ input {
   box-sizing: border-box;
 }
 
-/* Botão de login */
 button {
   width: 100%;
   padding: .75rem;
@@ -97,6 +92,25 @@ button {
   cursor: pointer;
   transition: background 0.3s ease;
   background: #2f00fe;
+  margin-top:1rem;
+  margin-bottom:1rem;
+}
+
+.forgot-password {
+  cursor:pointer;
+  color:#2e04ff;
+  font-weight:600;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Responsividade */
@@ -122,35 +136,21 @@ button {
   }
 }
 
+
 /* CSS CHAT */
 
-.container {
-  width: 95%;
-  height: 95vh;
-  max-width: 1920px;
-  background: white;
-  border-radius: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  position: relative;
-  padding: 40px;
-}
-
-.sidebar {
-  width: 18rem;
-  background-color: white;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-}
-
 .sidebar-header {
+  align-items:center;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-weight: 600;
+  font-weight: 500;
+  font-size: 1.25rem;
+  line-height:;
+  margin-bottom: 1.5rem;
+  position: absolute;
+  top: 1rem;
+  left: 2rem;
+  gap: 1rem; 
+  color: #333;
 }
 
 .sidebar-title {
@@ -158,72 +158,91 @@ button {
 }
 
 .sidebar-subtitle {
-  font-size: 0.875rem;
-  color: var(--gray-dark);
-  margin-top: 0.25rem;
+  font-size: 0.725rem;
+  margin-bottom: 1.5rem;
+  position: absolute;
+  top: 2.75rem;
+  left: 2rem;
+  display: flex;
+  gap: 1rem; 
 }
 
-/* Main Content */
 .content-chat {
-  flex: 1;
-  background-color: white;
+  flex: 1rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   text-align: center;
 }
 
 .title-chat {
   font-size: 4rem;
-  font-weight: 200;
-  color: var(--gray-dark);
-  letter-spacing: 0.2rem;
+  font-weight: bold;
+  color: #ddd;
+  letter-spacing: 0.5rem;
 }
 
-.title-highlight {
-  position: relative;
+/* .title-highlight {
+  position: center;
   color: var(--blue-dark);
   font-weight: bold;
-}
+} */
 
-/* Search Bar */
 .search-bar {
-  margin-top: 1.5rem;
   display: flex;
   align-items: center;
-  border: 1px solid var(--gray-dark);
-  border-radius: 999px;
-  padding: 0.75rem 1rem;
-  width: 500px;
-  justify-content:center;
-  background: var(--gray-light);
-}
-
-.search-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  margin-right: 8px;
+  padding: 0.5rem 1rem;
+  width: 50%;  
+  margin-top: 2rem;
+  position: relative;
 }
 
 .search-input {
-  flex: 1;
   border: none;
   outline: none;
-  background: grey;
+  flex: 1;
+  width: 100%;
+  min-height:40px;
+  height:auto;
+  font-size: 1rem;
+  background:#ececec; 
+  position: relative;
+  white-space:pre-wrap;
+  word-wrap:break-word;
+  box-sizing:border-box;
+  padding:0.75rem;
 }
 
-/* Suggestions */
-.suggestions {
+.input-icon {
+  cursor:pointer;
+  position: relative;
+  color: #444;
+}
+
+ .suggestions {
   margin-top: 1.5rem;
   text-align: left;
-  width: 500px;
+  width: 100%;
+  max-width:700px;
+}
+
+.suggestion-title {
+  font-weight: bold;
+  font-size: 0.95rem;
+  color: #000;
+}
+
+.suggestions-icon {
+  margin-right: 5px;
 }
 
 .suggestions-title {
   font-size: 0.875rem;
-  color: var(--text-dark);
+  color: #333;
+  display:flex;
+  align-center:center;
+  font-size:0.875rem;
 }
 
 .suggestions-container {
@@ -232,31 +251,114 @@ button {
   margin-top: 0.5rem;
 }
 
-.suggestion-btn {
-  background: var(--gray-light);
-  padding: 0.75rem;
-  border-radius: 0.5rem;
+.suggestion-card {
+  background: #ececec;
+  padding: 0.735rem;
+  border-radius: 0.75rem;
   text-align: left;
-  font-size: 0.875rem;
+  font-size: 0.735rem;
   cursor: pointer;
-  width: 30%;
-  border: none;
+  width: 100%;
+  min-width: 15rem;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
 }
 
-.suggestion-btn:hover {
-  background: var(--gray-dark);
+.suggestion-card:hover {
+  transform: translateY(-3px);
 }
 
 .suggestion-sub {
-  font-size: 0.75rem;
-  color: var(--gray-dark);
+  font-size: 0.8rem;
+  color: #666;
+  margin-top:0.3rem;
 }
 
-/* Top Icons */
 .top-icons {
   position: absolute;
   top: 1rem;
   right: 1rem;
   display: flex;
   gap: 1rem;
+}
+
+.icon {
+  color:#444;
+  margin-left: 10px;
+  cursor:pointer;
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  transition: transform 0.2s ease-in-out;
+ }
+
+ .icon:hover {
+  transform: scale(1.1);
+}
+
+.dropdown {
+  position: absolute;
+  top: 45px;
+  right: 0;
+  background: #ececec;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  width: 180px;
+  padding: 10px 0;
+  display: flex;
+  flex-direction: column;
+  z-index: 1000; 
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 15px;
+  cursor: pointer;
+  transition: background 0.2s ease-in-out;
+  font-size: 14px;
+}
+
+.dropdown-item:hover {
+  background: #ddd;
+}
+
+.dropdown-icon {
+  color: #555;
+}
+
+@media (max-width: 768px) {
+  .top-icons {
+    top: 8px;
+    right: 10px;
+  }
+
+  .icon {
+    width: 40px;
+    height: 40px; 
+  }
+
+  .dropdown {
+    width: 160px;
+    top: 50px;
+    right: 5px;
+  }
+
+  .dropdown-item {
+    font-size: 13px; 
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dropdown {
+    width: 150px; 
+    right: 2px;
+  }
+
+  .dropdown-item {
+    font-size: 12px;
+    padding: 8px;
+  }
 }
