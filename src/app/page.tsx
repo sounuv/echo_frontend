@@ -64,7 +64,7 @@ const closeModal = () => {
       <div className="content">
         <div className="logo-section">
           <img className="logo" src="./logo.png" alt="Logo" />
-          <h1 className="title">Entre no Heart</h1>
+          <h1 className="title">Entre no Echo</h1>
         </div>
         <form onSubmit={handleLogin}>
           <div className="form-group">

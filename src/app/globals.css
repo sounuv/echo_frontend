@@ -10,6 +10,7 @@ body {
   align-items: center;
   min-height: 100vh;
   background: linear-gradient(to bottom, #01d1fd, #2e04ff);
+  overflow: hidden; 
 }
 
 /* Container principal branco */
@@ -117,7 +118,8 @@ button {
 @media (max-width: 768px) {
   .container {
       width: 90%;
-      height: 95vh;
+      height: auto;
+      min-height: 95vh;
   }
 
   .form-box {
@@ -126,16 +128,15 @@ button {
 }
 
 @media (max-width: 480px) {
-  h2 {
-      font-size: 20px;
+  .title {
+    font-size: 1.25rem;
   }
 
   input, button {
-      font-size: 14px;
-      padding: 10px;
+      font-size: 0.8rem;
+      padding: 0.6rem;
   }
 }
-
 
 /* CSS CHAT */
 
@@ -144,7 +145,6 @@ button {
   display: flex;
   font-weight: 500;
   font-size: 1.25rem;
-  line-height:;
   margin-bottom: 1.5rem;
   position: absolute;
   top: 1rem;
@@ -214,6 +214,21 @@ button {
   padding:0.75rem;
 }
 
+@media (max-width: 768px) {
+
+  .search-bar {
+    width: 100%;
+    max-width: 500px; 
+    margin: 1.5rem auto; 
+  }
+
+  .search-input {
+    min-height: 48px; 
+    font-size: 1rem; 
+    padding: 0.8rem; 
+  }
+}
+
 .input-icon {
   cursor:pointer;
   position: relative;
@@ -274,6 +289,19 @@ button {
   margin-top:0.3rem;
 }
 
+@media (max-width: 768px) {
+  .suggestions-container {
+    flex-direction: column;
+    align-items: center; 
+    gap: 0.5rem;
+  }
+
+  .suggestion-card {
+    min-width: 0;    
+    width: 100%;
+  }
+}
+
 .top-icons {
   position: absolute;
   top: 1rem;
@@ -290,7 +318,11 @@ button {
   height:32px;
   border-radius:50%;
   transition: transform 0.2s ease-in-out;
- }
+}
+
+#profileDrop {
+  aspect-ratio: 1 / 1;
+}
 
  .icon:hover {
   transform: scale(1.1);
@@ -328,6 +360,105 @@ button {
   color: #555;
 }
 
+.modal-overlay {
+position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+  padding: 1rem;
+}
+
+.icon-modalConfig {
+  width:20px;
+}
+
+.profile-modalConfig {
+  position:top;
+}
+
+.profileModal {
+  width:60px;
+  border-radius:50%;
+  object-fit: cover; 
+  aspect-ratio: 1 / 1; 
+}
+
+.removeProfile {
+  color:black;
+  font-size:12px;
+  cursor:pointer;
+}
+
+.close-configs {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #555;
+}
+
+.close-configs:hover {
+  color: #000;
+}
+
+.modal-content {
+  background-color: white !important;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  width: 90%;
+  max-width: 600px;
+  position: relative;
+}
+
+#button-closeModal {
+  position: absolute;
+  top: 4px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #555;
+  width:8%;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.showHide {
+  color:#333;
+  font-size:13px;
+}
+
+.modal-body {
+  margin-bottom: 1rem;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.save-button {
+  background-color: #ffff;
+  color: black;
+  padding: 0.5rem 1rem;
+  width:80px;
+  border-radius: 50px;
+  cursor: pointer;
+}
+
 @media (max-width: 768px) {
   .top-icons {
     top: 8px;
@@ -336,7 +467,7 @@ button {
 
   .icon {
     width: 40px;
-    height: 40px; 
+    height: 40px;
   }
 
   .dropdown {
@@ -360,5 +491,25 @@ button {
   .dropdown-item {
     font-size: 12px;
     padding: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-content {
+    width: 100%;
+    padding: 15px;
+    border-radius: 8px;
+  }
+
+  .modal-header h2 {
+    font-size: 18px;
+  }
+
+  .modal-body textarea {
+    height: 60px;
+  }
+
+  .save-button {
+    width: 100%;
   }
 }
