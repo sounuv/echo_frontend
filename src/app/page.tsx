@@ -5,12 +5,21 @@ import { useRouter } from "next/navigation";
 
 export default function Login() {
   const router = useRouter();
+  const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState({ username: "", password: "" });
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.id]: e.target.value });
+  };
+
+  const handleForgotPassword = () => {
+    setShowModal(true);
+  };
+  
+  const closeModal = () => {
+    setShowModal(false);
   };
 
   const handleLogin = async (e: React.FormEvent) => {
@@ -36,7 +45,6 @@ export default function Login() {
         setTimeout(() => setError(false), 4000);
         return;
       }
-  
 
       if (!response.ok) {
         throw new Error("Erro ao fazer login");
@@ -58,6 +66,8 @@ export default function Login() {
       setTimeout(() => setError(false), 4000);
     }
   };
+
+  
 
   return (
     <div className="container">
@@ -102,7 +112,18 @@ export default function Login() {
           </div>
           <button type="submit">Entrar</button>
         </form>
+        <label className="forgot-password" onClick={handleForgotPassword}>Esqueci minha senha</label>
       </div>
+      {showModal && (
+        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-md">
+            <p>Entre em contato com seu administrador para recuperar a senha.</p>
+            <button onClick={closeModal} className="mt-4 bg-#2e04ff hover:bg-blue-500 text-white font-bold">
+              Fechar
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
