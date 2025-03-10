@@ -52,8 +52,10 @@ export default function Login() {
 
       const data = await response.json();
       const token = data.token;
+      const isAdmin = data.is_admin;
 
       sessionStorage.setItem("token", token);
+      sessionStorage.setItem("isAdmin", isAdmin);
 
       setSuccess(true);
       setTimeout(() => {

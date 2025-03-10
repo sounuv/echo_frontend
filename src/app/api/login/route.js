@@ -1,5 +1,3 @@
-// app/api/login/route.js
-
 export async function POST(req) {
   const { username, password } = await req.json();
 
@@ -18,10 +16,9 @@ export async function POST(req) {
     }
 
     const data = await response.json();
-    const token = data.access_token;
+    const { access_token, is_admin} = data;
 
-    // Retorna o token para o front-end
-    return new Response(JSON.stringify({ token }), { status: 200 });
+    return new Response(JSON.stringify({ access_token, is_admin }), { status: 200 });
 
   } catch (error) {
     console.error("Erro ao fazer login:", error);
