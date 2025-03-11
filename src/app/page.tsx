@@ -51,7 +51,7 @@ export default function Login() {
       }
 
       const data = await response.json();
-      const token = data.token;
+      const token = data.access_token;
       const isAdmin = data.is_admin;
 
       sessionStorage.setItem("token", token);

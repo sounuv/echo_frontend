@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Mic, Zap, Settings, LogOut, X, Info, Pencil } from "lucide-react";
 import Modal from "../components/modal";
@@ -28,6 +28,11 @@ export default function Home() {
 
   const router = useRouter();
   
+  useEffect(() => {
+    const storedIsAdmin = sessionStorage.getItem("isAdmin") === "true";
+    setIsAdmin(storedIsAdmin);
+  }, []);
+
   const handleSuggestionClick = (text: string) => {
     setSearch(text);
   };

@@ -1,6 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { X } from "lucide-react";
+import { User } from './users';
 
 interface ModalProps {
   isOpen: boolean;
@@ -15,27 +16,132 @@ interface ModalProps {
   onResetPassword: (userId: number) => void;
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, profileImage, onProfileImageChange, onSave, isAdmin, users, onEditUser, onDeleteUser, onResetPassword }) => {
-const [pencilVisible, setPencilVisible] = useState(false);
-const [showChangePassword, setShowChangePassword] = useState(false);
-const [showAbout, setShowAbout] = useState(false);
-const [showAccount, setShowAccount] = useState(true);
-const [showUsers, setShowUsers] = useState(false);
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, profileImage, onProfileImageChange, onSave, isAdmin, onEditUser, onDeleteUser, onResetPassword }) => {
+  const [pencilVisible, setPencilVisible] = useState(false);
+  const [showChangePassword, setShowChangePassword] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
+  const [showAccount, setShowAccount] = useState(true);
+  const [showUsers, setShowUsers] = useState(false);
+  const [users, setUsers] = useState<User[]>([]);
+  const [editingUser, setEditingUser] = useState<User | null>(null);
+  const [confirmDeleteModalOpen, setConfirmDeleteModalOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState<User | null>(null);
 
-if (!isOpen) return null;
+
+  const handleDeleteUserClick = (user: User) => {
+    setUserToDelete(user);
+    setConfirmDeleteModalOpen(true);
+  };
+
+  const confirmDeleteUser = async () => {
+    if (userToDelete) {
+      try {
+        const token = sessionStorage.getItem("token");
+        if (!token) {
+          console.error("Token não encontrado.");
+          return;
+        }
+  
+        const response = await fetch(`/api/v1/user/${userToDelete.id}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+  
+        if (!response.ok) {
+          throw new Error(`Erro ao deletar usuário: ${response.status}`);
+        }
+  
+        setUsers(users.filter((user) => user.id !== userToDelete.id));
+        setConfirmDeleteModalOpen(false);
+        setUserToDelete(null);
+      } catch (error) {
+        console.error("Erro ao deletar usuário", error);
+      }
+    }
+  };
+
+  const handleSaveUser = async () => {
+    if (editingUser) {
+      try {
+        const token = sessionStorage.getItem("token");
+        if (!token) {
+          console.error("Token não encontrado.");
+          return;
+        }
+
+        const response = await fetch(`/api/v1/user/${editingUser.id}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            username:editingUser.username,
+            email: editingUser.email,
+            password: editingUser.password || "",
+          }),
+        });
+        if (!response.ok) {
+          throw new Error(`Erro ao salvar usuário: ${response.status}`);
+        }
+        setEditingUser(null);
+        const updatedUsers = users.map(user => user.id === editingUser.id ? editingUser : user);
+        setUsers(updatedUsers);
+      } catch (error) {
+        console.error("Erro ao salvar usuário", error);
+      }
+    }
+  };
+
+const handleEditUser = (user: User) => {
+  setEditingUser(user);
+};
+
+const fetchUsers = async () => {
+  try {
+    const token = sessionStorage.getItem("token");
+    if (!token) {
+      console.error("Token não encontrado.");
+      return;
+    }
+    const response = await fetch("/api/users", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error(`Erro ao buscar usuários: ${response.status}`);
+    }
+    const usersData = await response.json();
+    setUsers(usersData);
+  } catch (error) {
+    console.error("Erro ao buscar usuários", error);
+  }
+};
+
+  useEffect(() => {
+    if (showUsers) {
+      fetchUsers();
+    }
+  }, [showUsers]);
 
 return (
+  <>
+  {isOpen && (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
         <div className="bg-white rounded-2xl shadow-lg w-full max-w-xl p-6 relative">
         {/* Cabeçalho do modal */}
         <div className="flex justify-between items-center w-full mb-4">
             <h2 className="text-lg font-semibold">Configurações</h2>
-            <button 
-            onClick={onClose} 
-            className="text-gray-500 hover:text-gray-700 bg-transparent p-2 rounded absolute top-4 right-4" 
-            id="button-closeModal">
+            <button
+                onClick={onClose}
+                className="text-gray-500 hover:text-gray-700 bg-transparent p-2 rounded absolute top-4 right-4"
+                id="button-closeModal"
+              >
                 <X size={20} />
-            </button>
+              </button>
         </div>
         {/* Layout do Modal */}
         <div className="flex">
@@ -174,21 +280,40 @@ return (
               <div>
                 {/* Lista de usuários */}
                 {users.map((user) => (
-                  <div key={user.id} className="flex justify-between items-center mb-2">
-                    <span>{user.name}</span>
-                    <div>
-                      <button className="text-blue-500 mr-2" onClick={() => onEditUser(user.id)}>
+                  <div key={user.id} className="user-list-item">
+                    <div className="user-details">
+                      <span className="user-name">{user.username}</span>
+                      <span className="user-email">{user.email}</span>
+                    </div>
+                    <div className="user-actions">
+                      <button onClick={() => handleEditUser(user)}>
                         Editar
                       </button>
-                      <button className="text-red-500 mr-2" onClick={() => onDeleteUser(user.id)}>
+                      <button onClick={() => handleDeleteUserClick(user)}>
                         Deletar
                       </button>
-                      <button className="text-gray-500" onClick={() => onResetPassword(user.id)}>
+                      <button className="whitespace-nowrap" onClick={() => onResetPassword(user.id)}>
                         Resetar Senha
                       </button>
                     </div>
                   </div>
                 ))}
+                {/* Formulário de edição */}
+                  {editingUser && (
+                    <div className="mt-4">
+                      <input
+                        type="text"
+                        value={editingUser.username}
+                        onChange={(e) => setEditingUser({ ...editingUser, username: e.target.             value })}
+                      />
+                      <input
+                        type="email"
+                        value={editingUser.email}
+                        onChange={(e) => setEditingUser({ ...editingUser, email: e.target.              value })}
+                      />
+                      <button onClick={handleSaveUser}>Salvar Edição</button>
+                    </div>
+                  )}
                 {/* Botão para criar novo usuário */}
                 <div className="flex justify-end mt-4">
                   <button className="text-green-500" title="Criar usuário">
@@ -202,8 +327,33 @@ return (
             )}
           </main>
         </div>
+        {confirmDeleteModalOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+            <div className="bg-white rounded-lg p-6">
+              <p className="text-lg font-semibold mb-4">
+                Tem certeza que deseja deletar o usuário {userToDelete?.username}?
+              </p>
+              <div className="flex justify-end">
+                <button
+                  className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mr-2"
+                  onClick={() => setConfirmDeleteModalOpen(false)}
+                >
+                  Cancelar
+                </button>
+                <button
+                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                  onClick={confirmDeleteUser}
+                >
+                  Deletar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
+  )}
+    </>
   );
 };
 
