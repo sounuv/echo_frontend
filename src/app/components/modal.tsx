@@ -1,4 +1,3 @@
-"use client";
 import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { User } from './users';
@@ -26,6 +25,47 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, profileImage, onProfileI
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [confirmDeleteModalOpen, setConfirmDeleteModalOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState<User | null>(null);
+  const [showCreateUserForm, setShowCreateUserForm] = useState(false);
+  const [newUsername, setNewUsername] = useState("");
+  const [newEmail, setNewEmail] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+
+  const handleCreateUserClick = () => {
+    setShowCreateUserForm(true);
+  };
+
+  const handleCreateUser = async () => {
+    try {
+      const token = sessionStorage.getItem("token");
+      if (!token) {
+        console.error("Token não encontrado.");
+        return;
+      }
+      const response = await fetch("/api/v1/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          username: newUsername,
+          email: newEmail,
+          password: newPassword,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(`Erro ao criar usuário: ${response.status}`);
+      }
+      setNewUsername("");
+      setNewEmail("");
+      setNewPassword("");
+      setShowCreateUserForm(false);
+
+      fetchUsers();
+    } catch (error) {
+      console.error("Erro ao criar usuário", error);
+    }
+  };
 
 
   const handleDeleteUserClick = (user: User) => {
@@ -41,20 +81,20 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, profileImage, onProfileI
           console.error("Token não encontrado.");
           return;
         }
-  
-        const response = await fetch(`/api/user/${userToDelete.id}`, {
+
+        const response = await fetch(`/api/v1/user/${userToDelete.id}`, {
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-  
+
         if (!response.ok) {
           throw new Error(`Erro ao deletar usuário: ${response.status}`);
         }
-  
+
         setUsers(users.filter((user) => user.id !== userToDelete.id));
-        setConfirmDeleteModalOpen(false);
+        setConfirmDeleteModalOpen(false); 
         setUserToDelete(null);
       } catch (error) {
         console.error("Erro ao deletar usuário", error);
@@ -80,8 +120,8 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, profileImage, onProfileI
           body: JSON.stringify({
             user_id:editingUser.id,
             username:editingUser.username,
-            email: editingUser.email
-  
+            email: editingUser.email,
+            password: newPassword,
           }),
         });
 
@@ -91,6 +131,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, profileImage, onProfileI
           throw new Error(`Erro ao salvar usuário: ${response.status}`);
         }
         setEditingUser(null);
+        setNewPassword("");
         const updatedUsers = users.map(user => user.id === editingUser.id ? editingUser : user);
         setUsers(updatedUsers);
       } catch (error) {
@@ -228,16 +269,16 @@ return (
                   />
                 </div>
                 {/* Mudar Senha */}
-                <div className="flex justify-between items-center">
+                {/* <div className="flex justify-between items-center">
                   <p className="text-sm text-gray-700">Mudar Senha</p>
                   <span className="showHide" onClick={() => setShowChangePassword(!showChangePassword)}>
                     {showChangePassword ? "Ocultar" : "Mostrar"}
                   </span>
                 </div>
                 {showChangePassword && (
-                  <div>
+                  <div> */}
                     {/* 1. Senha atual */}
-                    <div className="mb-4">
+                    {/* <div className="mb-4">
                       <label htmlFor="senhaAtual" className="block text-sm font-medium text-gray-700">
                         Senha Atual
                       </label>
@@ -246,9 +287,9 @@ return (
                         id="senhaAtual"
                         className="mt-1 block w-full rounded-md bg-gray-100 text-gray-800 px-3 py-2 border-none"
                       />
-                    </div>
+                    </div> */}
                     {/* 2. Nova Senha */}
-                    <div className="mb-4">
+                    {/* <div className="mb-4">
                       <label htmlFor="novaSenha" className="block text-sm font-medium text-gray-700">
                         Nova Senha
                       </label>
@@ -257,9 +298,9 @@ return (
                         id="novaSenha"
                         className="mt-1 block w-full rounded-md bg-gray-100 text-gray-800 px-3 py-2 border-none"
                       />
-                    </div>
+                    </div> */}
                     {/* 3. Confirmar Senha */}
-                    <div className="mb-4">
+                    {/* <div className="mb-4">
                       <label htmlFor="confirmarSenha" className="block text-sm font-medium text-gray-700">
                         Confirmar Nova Senha
                       </label>
@@ -270,7 +311,7 @@ return (
                       />
                     </div>
                   </div>
-                )}
+                )} */}
                 {/* ... Salvar ... */}
                 <div className="modal-footer">
                   <button className="save-button" onClick={onSave}>
@@ -296,9 +337,6 @@ return (
                       <button onClick={() => handleDeleteUserClick(user)}>
                         Deletar
                       </button>
-                      <button className="whitespace-nowrap" onClick={() => onResetPassword(user.id)}>
-                        Resetar Senha
-                      </button>
                     </div>
                   </div>
                 ))}
@@ -315,15 +353,46 @@ return (
                         value={editingUser.email}
                         onChange={(e) => setEditingUser({ ...editingUser, email: e.target.              value })}
                       />
-                      <button onClick={handleSaveUser}>Salvar Edição</button>
+                      <input 
+                        type="password"
+                        placeholder="Nova senha (opcional)"
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                      />
+                      <button className="save-button" onClick={handleSaveUser}>Salvar</button>
                     </div>
                   )}
                 {/* Botão para criar novo usuário */}
                 <div className="flex justify-end mt-4">
-                  <button className="text-green-500" title="Criar usuário">
-                    +
+                  <button className="text-green-500" title="Criar usuário" onClick={handleCreateUserClick}> 
+                    Criar usuário
                   </button>
                 </div>
+                {showCreateUserForm && (
+                  <div className="mt-4">
+                    <input
+                      type="text"
+                      placeholder="Nome de usuário"
+                      value={newUsername}
+                      onChange={(e) => setNewUsername(e.target.value)}
+                    />
+                    <input
+                      type="email"
+                      placeholder="Email"
+                      value={newEmail}
+                      onChange={(e) => setNewEmail(e.target.value)}
+                    />
+                    <input
+                      type="password"
+                      placeholder="Senha"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                    />
+                    <button className="save-button" onClick={handleCreateUser}>
+                      Salvar
+                    </button>
+                  </div>
+                )}
               </div>
             )}
             {showAbout && (

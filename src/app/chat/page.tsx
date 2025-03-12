@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Mic, Zap, Settings, LogOut, X, Info, Pencil } from "lucide-react";
 import Modal from "../components/modal";
@@ -19,6 +19,8 @@ export default function Home() {
   const [isAdmin, setIsAdmin] = useState(true);
   const [messages, setMessages] = useState<Message[]>([]);  
   const [newMessage, setNewMessage] = useState("");
+  const [firstMessageSent, setFirstMessageSent] = useState(false);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
 
   const [users, setUsers] = useState([
@@ -37,10 +39,13 @@ export default function Home() {
     setSearch(text);
   };
 
-  const [profileImage, setProfileImage] = useState(() => {
+  const [profileImage, setProfileImage] = useState("./user.png");
+  useEffect(() => {
     const storedImage = localStorage.getItem("profileImage");
-    return storedImage ? storedImage : "./user.png";
-  });
+    if (storedImage) {
+      setProfileImage(storedImage);
+    }
+  }, []);
 
   const handleProfileImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -63,22 +68,20 @@ export default function Home() {
 
 const handleEditUser = (userId: number) => { 
   console.log(`Editar usuário com ID: ${userId}`);
-  // lógica de edição aqui
 };
 
 const handleDeleteUser = (userId: number) => {
   console.log(`Deletar usuário com ID: ${userId}`);
-  // lógica de deleção aqui
 };
 
 const handleResetPassword = (userId: number) => {
   console.log(`Resetar senha do usuário com ID: ${userId}`);
-  // lógica de reset de senha aqui
 };
 
 
 const handleSendMessage = async () => {
   setMessages([...messages, { role: "user", content: newMessage }]);
+  setFirstMessageSent(true);
   try {
     const token = sessionStorage.getItem("token");
 
@@ -86,7 +89,6 @@ const handleSendMessage = async () => {
       console.error("Token não encontrado no sessionStorage.");
       return;
     }
-    
     const response = await fetch("/api/chat", {
       method: "POST",
       headers: {
@@ -111,21 +113,23 @@ const handleSendMessage = async () => {
       { role: "assistant", content: chatResponse },
     ]);
 
-    setNewMessage(""); 
-  } catch (error) {
-    console.error("Erro ao obter resposta da API:", error);
-  }
-};
+    setNewMessage("");
+    if (messagesContainerRef.current) {
+        messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    }
+      } catch (error) {
+          console.error("Erro ao obter resposta da API:", error);
+      }
+  };
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewMessage(e.target.value);
+  };
 
-const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  setNewMessage(e.target.value);
-};
-
-const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-  if (e.key === "Enter") {
-    handleSendMessage();
-  }
-};
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSendMessage();
+    }
+  };
 
   return (
     <div className="container">
@@ -136,7 +140,9 @@ const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
       </aside>
       <main className="content-chat">
         <h1 className="title-chat">ECHO</h1>
-        <div className="search-bar relative">
+        {!firstMessageSent && (
+        <>
+          <div className="search-bar relative">
           <input
             type="text"
             className="search-input relative"
@@ -146,31 +152,45 @@ const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
             onKeyDown={handleInputKeyDown}
           />
           <Mic size={20} className="input-icon" />
-        </div>
-        <div className="suggestions">
-          <span className="suggestions-title">
-            <Zap size={16} className="suggestions-icon" /> Sugerido
-          </span>
-          <div className="suggestions-container">
-            {[
-              { title: "Quem é a Blue Saúde?", sub: "Entenda a missão e visão da Blue...", message: "Me explique quem é a Blue Saúde e qual é a missão da empresa como uma health tech." },
-              { title: "Como o Echo pode te ajudar?", sub: "Descubra funcionalidades do Echo!", message: "O que o Echo pode fazer para me ajudar?" },
-              { title: "Administradoras parceiras", sub: "Descubra as administradoras que apoiam...", message: "Quais as administradoras que a Blue Saúde tem parceria?" }
-            ].map((item, index) => (
-              <div key={index} className="suggestion-card" onClick={() => handleSuggestionClick(item.message)}>
-                <strong className="suggestion-title">{item.title}</strong>
-                <p className="suggestion-sub">{item.sub}</p>
-              </div>
-            ))}
           </div>
-        </div>
-        <div className="messages-container">
+          <div className="suggestions">
+            <span className="suggestions-title">
+              <Zap size={16} className="suggestions-icon" /> Sugerido
+            </span>
+            <div className="suggestions-container">
+              {[
+                { title: "Quem é a Blue Saúde?", sub: "Entenda a missão e visão da  Blue...", message: "Me explique quem é a Blue Saúde e qual é a   missão da empresa como uma health tech." },
+                { title: "Como o Echo pode te ajudar?", sub: "Descubra  funcionalidades do Echo!", message: "O que o Echo pode fazer para me   ajudar?" },
+                { title: "Administradoras parceiras", sub: "Descubra as   administradoras que apoiam...", message: "Quais as administradoras  que a Blue Saúde tem parceria?" }
+              ].map((item, index) => (
+              <div key={index} className="suggestion-card" onClick={() =>   handleSuggestionClick(item.message)}>
+                  <strong className="suggestion-title">{item.title}</strong>
+                  <p className="suggestion-sub">{item.sub}</p>
+              </div>
+              ))}
+            </div>
+          </div>
+          </>
+        )}
+        <div className="messages-container" ref={messagesContainerRef}>
           {messages.map((message, index) => (
             <div key={index} className={`message ${message.role}`}>
               {message.content}
             </div>
           ))}
         </div>
+        {firstMessageSent && (
+          <div className="search-baar relative">
+            <input
+            type="text"
+            className="search-input relative"
+            placeholder="Como posso ajudar você hoje?"
+            value={newMessage}
+            onChange={handleInputChange}
+            onKeyDown={handleInputKeyDown}
+          />
+          </div>
+        )}
       </main>
       <div className="top-icons relative">
         <img

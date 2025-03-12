@@ -13,12 +13,9 @@ export async function OPTIONS() {
 }
 
 export async function PUT(request, context) {
-
   try {
     const { id } = context.params;
-
     const body = await request.json();;
-
     const authorization = request.headers.get('Authorization');
     if (!authorization || !authorization.startsWith('Bearer ')) {
       return new Response(
@@ -26,8 +23,16 @@ export async function PUT(request, context) {
         { status: 401 }
       );
     }
-
     const token = authorization.split(' ')[1];
+
+    const requestBody = {
+      username: body.username,
+      email: body.email,
+    };
+
+    if (body.password) {
+      requestBody.password = body.password;
+    }
 
     const response = await fetch(`${API_URL}/${id}`, {
       method: 'PUT',
@@ -35,7 +40,7 @@ export async function PUT(request, context) {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify(requestBody),
     });
 
     if (!response.ok) {
@@ -95,4 +100,41 @@ export async function GET(request, context) {
     JSON.stringify(data),
     { status: 200 }
   );
+}
+
+export async function DELETE(request, context) {
+  try {
+    const { id } = context.params;
+    const authorization = request.headers.get('Authorization');
+    if (!authorization || !authorization.startsWith('Bearer ')) {
+      return new Response(
+        JSON.stringify({ error: 'Token inválido ou não fornecido' }),
+        { status: 401 }
+      );
+    }
+    const token = authorization.split(' ')[1];
+    const response = await fetch(`${API_URL}/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) {
+      const errorResponse = await response.json();
+      return new Response(
+        JSON.stringify({ error: errorResponse.error || 'Erro na API externa' }),
+        { status: response.status }
+      );
+    }
+    return new Response(
+      JSON.stringify({ message: 'Usuário deletado com sucesso' }),
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error('Erro ao deletar usuário:', error);
+    return new Response(
+      JSON.stringify({ error: 'Erro interno ao deletar usuário' }),
+      { status: 500 }
+    );
+  }
 }
