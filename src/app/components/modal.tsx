@@ -42,7 +42,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, profileImage, onProfileI
           return;
         }
   
-        const response = await fetch(`/api/v1/user/${userToDelete.id}`, {
+        const response = await fetch(`/api/user/${userToDelete.id}`, {
           method: "DELETE",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -78,11 +78,15 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, profileImage, onProfileI
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
+            user_id:editingUser.id,
             username:editingUser.username,
-            email: editingUser.email,
-            password: editingUser.password || "",
+            email: editingUser.email
+  
           }),
         });
+
+        const data = await response.json();
+
         if (!response.ok) {
           throw new Error(`Erro ao salvar usuário: ${response.status}`);
         }
