@@ -2,9 +2,9 @@
 set -e
 set -o pipefail
 
-STACK_NAME="echo_front"
-SERVICE_NAME="echo_front"
-IMAGE_NAME="echo_front:latest"
+STACK_NAME="echo_frontend"
+SERVICE_NAME="echo_frontend"
+IMAGE_NAME="echo_frontend:latest"
 
 echo "Starting Docker image build process..."
 docker build -t $IMAGE_NAME .

@@ -1,6 +1,6 @@
 services:
-  echo_front:
-    image: echo_front:latest
+  echo_frontend:
+    image: echo_frontend:latest
     ports:
       - "3000:3000"
     deploy:
