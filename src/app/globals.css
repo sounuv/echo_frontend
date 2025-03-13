@@ -26,6 +26,8 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   position: relative;
   padding: 40px;
+  position: relative;
+  justify-content: center;
 }
 
 /* CSS LOGIN */
@@ -171,25 +173,19 @@ button {
   flex: 1rem;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   text-align: center;
-}
-
-.title-chat {
-  font-size: 4rem;
-  font-weight: bold;
-  color: #ddd;
-  letter-spacing: 0.5rem;
 }
 
 .search-bar {
   display: flex;
   align-items: center;
+  justify-content:center;
   padding: 0.5rem 1rem;
   width: 50%;  
   margin-top: 2rem;
   position: relative;
+  margin: 2rem auto;
 }
 
 .search-input {
@@ -211,24 +207,22 @@ button {
 .search-bar.fixed { 
   position: fixed;
   bottom: 0;
-  left: 240px; 
+  margin-top:auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  width: 50%;
+  left: 5rem; 
   right: 0;
   z-index: 10;
-  background: white; 
-}
-
-.messages-container {
-  flex: 1;
-  overflow-y: auto;
-  padding: 20px 0;
-  padding-bottom: 80px; 
 }
 
 @media (max-width: 768px) {
 
   .search-bar {
     width: 100%;
-    max-width: 500px; 
+    max-width: 500px;
     margin: 1.5rem auto; 
   }
 
@@ -236,6 +230,42 @@ button {
     min-height: 48px; 
     font-size: 1rem; 
     padding: 0.8rem; 
+    width: auto;
+  }
+  .search-bar.fixed {
+    width: 60%;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 1.5rem; /* Ajuste de espaçamento */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.8rem;
+  }
+
+  @media (max-width: 480px) {
+    .search-bar {
+      width: 100%;
+      max-width: 500px;
+      margin: 1.5rem auto; 
+    }
+  
+    .search-input {
+      min-height: 48px; 
+      font-size: 1rem; 
+      padding: 0.8rem; 
+      justify-content:center;
+      align-items:center;
+      margin-rightt: 5rem;
+    }
+    .search-bar.fixed {
+      padding: 1rem; 
+      align-items:center;
+      justify-content: center;
+      position:fixed;
+      bottom:0;
+      display:flex;
+    }
   }
 }
 
@@ -243,73 +273,6 @@ button {
   cursor:pointer;
   position: relative;
   color: #444;
-}
-
- .suggestions {
-  margin-top: 1.5rem;
-  text-align: left;
-  width: 100%;
-  max-width:700px;
-}
-
-.suggestion-title {
-  font-weight: bold;
-  font-size: 0.95rem;
-  color: #000;
-}
-
-.suggestions-icon {
-  margin-right: 5px;
-}
-
-.suggestions-title {
-  font-size: 0.875rem;
-  color: #333;
-  display:flex;
-  align-center:center;
-  font-size:0.875rem;
-}
-
-.suggestions-container {
-  display: flex;
-  gap: 1rem;
-  margin-top: 0.5rem;
-}
-
-.suggestion-card {
-  background: #ececec;
-  padding: 0.735rem;
-  border-radius: 0.75rem;
-  text-align: left;
-  font-size: 0.735rem;
-  cursor: pointer;
-  width: 100%;
-  min-width: 15rem;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease-in-out;
-}
-
-.suggestion-card:hover {
-  transform: translateY(-3px);
-}
-
-.suggestion-sub {
-  font-size: 0.8rem;
-  color: #666;
-  margin-top:0.3rem;
-}
-
-@media (max-width: 768px) {
-  .suggestions-container {
-    flex-direction: column;
-    align-items: center; 
-    gap: 0.5rem;
-  }
-
-  .suggestion-card {
-    min-width: 0;    
-    width: 100%;
-  }
 }
 
 .top-icons {
