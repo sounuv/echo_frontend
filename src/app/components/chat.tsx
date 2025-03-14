@@ -5,21 +5,25 @@ import { marked } from "marked";
 import styles from "./chat.module.css";
 import loading from "@/public/loading.svg";
 import Image from "next/image";
+import Alert from "../components/alert";
 
 interface Message {
   role: "user" | "assistant";
   content: string;
+}
+interface ChatProps {
+  setTokenExpired: (expired: boolean) => void;
 }
 
 const Chat = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const messagesContainerRef = useRef<HTMLDivElement>(null);
-  const [chatResponse, setChatResponse] = useState("");
   const [firstMessageSent, setFirstMessageSent] = useState(false);
   const [search, setSearch] = useState("");
   const [showTitle, setShowTitle] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const suggestions = [
     {
@@ -49,8 +53,6 @@ const Chat = () => {
   const handleSendMessage = async () => {
     const userMessageContent: string = newMessage.trim();
     if (!userMessageContent) return;
-
-    const userMessageHtml = marked.parse(userMessageContent);
 
     const updatedMessages: Message[] = [
       ...messages,
@@ -112,9 +114,14 @@ const Chat = () => {
       }
     } catch (error) {
       console.error("Erro geral ao processar requisição:", error);
+      setErrorMessage("Seu token expirou. Logue novamente por favor");
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const closeErrorMessage = () => {
+    setErrorMessage(null);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -160,6 +167,11 @@ const Chat = () => {
 
   return (
     <div className={styles["chat-container"]}>
+      <div>
+        {errorMessage && (
+          <Alert message={errorMessage} onClose={closeErrorMessage} />
+        )}
+      </div>
       {showTitle && <h1 className={styles["title-chat"]}>ECHO</h1>}
       {!firstMessageSent && (
         <div className={styles["suggestions-wrapper"]}>
@@ -204,7 +216,7 @@ const Chat = () => {
                 ? styles["user-message"]
                 : styles["assistant-message"]
             }`}
-            dangerouslySetInnerHTML={{ __html: message.content }}
+            dangerouslySetInnerHTML={{ __html: marked.parse(message.content) }}
           />
         ))}
         {isLoading && (

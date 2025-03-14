@@ -29,20 +29,6 @@ export default function Home() {
     }
   }, []);
 
-  useEffect(() => {
-    const token = sessionStorage.getItem("token");
-    if (!token) {
-      router.push("/");
-    } else {
-      const storedIsAdmin = sessionStorage.getItem("isAdmin") === "true";
-      setIsAdmin(storedIsAdmin);
-      const storedImage = localStorage.getItem("profileImage");
-      if (storedImage) {
-        setProfileImage(storedImage);
-      }
-    }
-  }, [router]);
-
   const handleProfileImageChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
