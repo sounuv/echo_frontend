@@ -4,9 +4,12 @@ export async function POST(req) {
     const authorization = req.headers.get("authorization");
 
     if (!authorization) {
-      return new Response(JSON.stringify({ message: "Autorização necessária" }), {
-        status: 401,
-      });
+      return new Response(
+        JSON.stringify({ message: "Autorização necessária" }),
+        {
+          status: 401,
+        }
+      );
     }
 
     const response = await fetch("http://172.233.20.225/api/v1/chat", {
@@ -31,7 +34,6 @@ export async function POST(req) {
         "Content-Type": "application/json",
       },
     });
-
   } catch (error) {
     console.error("Erro ao processar requisição:", error);
     return new Response(

@@ -17,7 +17,7 @@ export default function Login() {
   const handleForgotPassword = () => {
     setShowModal(true);
   };
-  
+
   const closeModal = () => {
     setShowModal(false);
   };
@@ -31,7 +31,7 @@ export default function Login() {
       const response = await fetch("/api/login", {
         method: "POST",
         headers: {
-          "Accept": "/",
+          Accept: "/",
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -41,7 +41,7 @@ export default function Login() {
       });
 
       if (response.status === 401) {
-        setError(true); 
+        setError(true);
         setTimeout(() => setError(false), 4000);
         return;
       }
@@ -68,8 +68,6 @@ export default function Login() {
       setTimeout(() => setError(false), 4000);
     }
   };
-
-  
 
   return (
     <div className="container">
@@ -114,13 +112,20 @@ export default function Login() {
           </div>
           <button type="submit">Entrar</button>
         </form>
-        <label className="forgot-password" onClick={handleForgotPassword}>Esqueci minha senha</label>
+        <label className="forgot-password" onClick={handleForgotPassword}>
+          Esqueci minha senha
+        </label>
       </div>
       {showModal && (
         <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-6 rounded-md">
-            <p>Entre em contato com seu administrador para recuperar a senha.</p>
-            <button onClick={closeModal} className="mt-4 bg-#2e04ff hover:bg-blue-500 text-white font-bold">
+            <p>
+              Entre em contato com seu administrador para recuperar a senha.
+            </p>
+            <button
+              onClick={closeModal}
+              className="mt-4 bg-#2e04ff hover:bg-blue-500 text-white font-bold"
+            >
               Fechar
             </button>
           </div>
