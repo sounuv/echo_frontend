@@ -39,9 +39,15 @@ const Modal: React.FC<ModalProps> = ({
   const [newUsername, setNewUsername] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [activeForm, setActiveForm] = useState<"edit" | "create" | null>(null);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const usersPerPage = 3;
 
   const handleCreateUserClick = () => {
     setShowCreateUserForm(true);
+    setActiveForm('create');
+    setEditingUser(null);
   };
 
   const handleCreateUser = async () => {
@@ -70,6 +76,7 @@ const Modal: React.FC<ModalProps> = ({
       setNewEmail("");
       setNewPassword("");
       setShowCreateUserForm(false);
+      setActiveForm(null);
 
       fetchUsers();
     } catch (error) {
@@ -149,10 +156,16 @@ const Modal: React.FC<ModalProps> = ({
         console.error("Erro ao salvar usuário", error);
       }
     }
+    setEditingUser(null);
+    setNewPassword("");
+    setActiveForm(null);
+
   };
 
   const handleEditUser = (user: User) => {
     setEditingUser(user);
+    setActiveForm('edit');
+    setShowCreateUserForm(false);
   };
 
   const fetchUsers = async () => {
@@ -172,6 +185,7 @@ const Modal: React.FC<ModalProps> = ({
       }
       const usersData = await response.json();
       setUsers(usersData);
+      setCurrentPage(1);
     } catch (error) {
       console.error("Erro ao buscar usuários", error);
     }
@@ -182,6 +196,14 @@ const Modal: React.FC<ModalProps> = ({
       fetchUsers();
     }
   }, [showUsers]);
+
+  const indexOfLastUser = currentPage * usersPerPage;
+  const indexOfFirstUser = indexOfLastUser - usersPerPage;
+  const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+
+  const totalPages = Math.ceil(users.length / usersPerPage);
+
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   return (
     <>
@@ -242,8 +264,8 @@ const Modal: React.FC<ModalProps> = ({
                 </nav>
               </aside>
               {/* Conteúdo */}
-              <main className="w-3/4 pl-4">
-                {showAccount && (
+              <main className="w-3/4 pl-4 max-h-[80vh] overflow-y-auto">
+              {showAccount && (
                   <>
                     {/* Imagem de Perfil */}
                     <div
@@ -343,7 +365,7 @@ const Modal: React.FC<ModalProps> = ({
                 {showUsers && isAdmin && (
                   <div>
                     {/* Lista de usuários */}
-                    {users.map((user) => (
+                    {currentUsers.map((user) => (
                       <div key={user.id} className="user-list-item">
                         <div className="user-details">
                           <span className="user-name">{user.username}</span>
@@ -360,7 +382,7 @@ const Modal: React.FC<ModalProps> = ({
                       </div>
                     ))}
                     {/* Formulário de edição */}
-                    {editingUser && (
+                    {editingUser && activeForm === 'edit' && (
                       <div className="mt-4">
                         <input
                           type="text"
@@ -396,6 +418,29 @@ const Modal: React.FC<ModalProps> = ({
                         </button>
                       </div>
                     )}
+                    {/* Controles de paginação */}
+                    <div className="pagination-container">
+                      <div className="flex justify-center mt-4">
+                        <button
+                          onClick={() => paginate(currentPage - 1)}
+                          disabled={currentPage === 1}
+                          className="mx-2 px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+                        >
+                          Anterior
+                        </button>
+                        <div className="pagination-text">
+                          <span>{currentPage}</span> de{" "}
+                          <span>{totalPages}</span>
+                        </div>
+                        <button
+                          onClick={() => paginate(currentPage + 1)}
+                          disabled={currentPage === totalPages}
+                          className="mx-2 px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+                        >
+                          Próximo
+                        </button>
+                      </div>
+                    </div>
                     {/* Botão para criar novo usuário */}
                     <div className="flex justify-end mt-4">
                       <button
@@ -406,7 +451,7 @@ const Modal: React.FC<ModalProps> = ({
                         Criar usuário
                       </button>
                     </div>
-                    {showCreateUserForm && (
+                    {showCreateUserForm && activeForm === 'create' && (
                       <div className="mt-4">
                         <input
                           type="text"
