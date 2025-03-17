@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { User } from "./users";
+import Alert from "../components/alert";
 
 interface ModalProps {
   isOpen: boolean;
@@ -40,13 +41,14 @@ const Modal: React.FC<ModalProps> = ({
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [activeForm, setActiveForm] = useState<"edit" | "create" | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const [currentPage, setCurrentPage] = useState(1);
   const usersPerPage = 3;
 
   const handleCreateUserClick = () => {
     setShowCreateUserForm(true);
-    setActiveForm('create');
+    setActiveForm("create");
     setEditingUser(null);
   };
 
@@ -77,10 +79,11 @@ const Modal: React.FC<ModalProps> = ({
       setNewPassword("");
       setShowCreateUserForm(false);
       setActiveForm(null);
-
       fetchUsers();
+      setErrorMessage(null);
     } catch (error) {
       console.error("Erro ao criar usuário", error);
+      setErrorMessage("Seu token expirou. Logue novamente por favor");
     }
   };
 
@@ -112,8 +115,10 @@ const Modal: React.FC<ModalProps> = ({
         setUsers(users.filter((user) => user.id !== userToDelete.id));
         setConfirmDeleteModalOpen(false);
         setUserToDelete(null);
+        setErrorMessage(null);
       } catch (error) {
         console.error("Erro ao deletar usuário", error);
+        setErrorMessage("Seu token expirou. Logue novamente por favor");
       }
     }
   };
@@ -141,8 +146,6 @@ const Modal: React.FC<ModalProps> = ({
           }),
         });
 
-        const data = await response.json();
-
         if (!response.ok) {
           throw new Error(`Erro ao salvar usuário: ${response.status}`);
         }
@@ -152,19 +155,20 @@ const Modal: React.FC<ModalProps> = ({
           user.id === editingUser.id ? editingUser : user
         );
         setUsers(updatedUsers);
+        setErrorMessage(null);
       } catch (error) {
         console.error("Erro ao salvar usuário", error);
+        setErrorMessage("Seu token expirou. Logue novamente por favor");
       }
     }
     setEditingUser(null);
     setNewPassword("");
     setActiveForm(null);
-
   };
 
   const handleEditUser = (user: User) => {
     setEditingUser(user);
-    setActiveForm('edit');
+    setActiveForm("edit");
     setShowCreateUserForm(false);
   };
 
@@ -181,13 +185,19 @@ const Modal: React.FC<ModalProps> = ({
         },
       });
       if (!response.ok) {
-        throw new Error(`Erro ao buscar usuários: ${response.status}`);
+        if (response.status === 401) {
+          throw new Error("Seu token expirou. Logue novamente por favor");
+        } else {
+          throw new Error(`Erro ao buscar usuários: ${response.status}`);
+        }
       }
       const usersData = await response.json();
       setUsers(usersData);
       setCurrentPage(1);
+      setErrorMessage(null);
     } catch (error) {
       console.error("Erro ao buscar usuários", error);
+      setErrorMessage("Seu token expirou. Logue novamente por favor");
     }
   };
 
@@ -205,11 +215,20 @@ const Modal: React.FC<ModalProps> = ({
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
+  const closeErrorMessage = () => {
+    setErrorMessage(null);
+  };
+
   return (
     <>
       {isOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white rounded-2xl shadow-lg w-full max-w-xl p-6 relative">
+            <div>
+              {errorMessage && (
+                <Alert message={errorMessage} onClose={closeErrorMessage} />
+              )}
+            </div>
             {/* Cabeçalho do modal */}
             <div className="flex justify-between items-center w-full mb-4">
               <h2 className="text-lg font-semibold">Configurações</h2>
@@ -265,7 +284,7 @@ const Modal: React.FC<ModalProps> = ({
               </aside>
               {/* Conteúdo */}
               <main className="w-3/4 pl-4 max-h-[80vh] overflow-y-auto">
-              {showAccount && (
+                {showAccount && (
                   <>
                     {/* Imagem de Perfil */}
                     <div
@@ -382,7 +401,7 @@ const Modal: React.FC<ModalProps> = ({
                       </div>
                     ))}
                     {/* Formulário de edição */}
-                    {editingUser && activeForm === 'edit' && (
+                    {editingUser && activeForm === "edit" && (
                       <div className="mt-4">
                         <input
                           type="text"
@@ -451,7 +470,7 @@ const Modal: React.FC<ModalProps> = ({
                         Criar usuário
                       </button>
                     </div>
-                    {showCreateUserForm && activeForm === 'create' && (
+                    {showCreateUserForm && activeForm === "create" && (
                       <div className="mt-4">
                         <input
                           type="text"
