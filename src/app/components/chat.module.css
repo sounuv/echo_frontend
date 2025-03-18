@@ -69,10 +69,6 @@
   background-color: #f2f2f2;
 }
 
-.loading-svg-container {
-  background: none !important;
-}
-
 .assistant-message table {
   width: 100%;
   border-collapse: collapse;
@@ -91,8 +87,9 @@
 }
 
 .loading-svg-container {
-  background: none !important;
+  background-color: #fff;
 }
+
 
 .suggestions {
   margin-top: 1.5rem;

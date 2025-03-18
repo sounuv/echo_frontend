@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Mic, Zap } from "lucide-react";
 import { marked } from "marked";
 import styles from "./chat.module.css";
-import loading from "@/public/loading.svg";
+import loading from "@/public/loading.gif";
 import Image from "next/image";
 import Alert from "../components/alert";
 
@@ -229,7 +229,7 @@ const Chat = () => {
         {isLoading && (
           <div className={styles["assistant-message"]}>
             <div className={styles["loading-svg-container"]}>
-              <Image src={loading} width={60} height={60} alt="Carregando..." />
+              <Image src={loading} width={90} height={90} alt="Carregando..." />
             </div>
           </div>
         )}
