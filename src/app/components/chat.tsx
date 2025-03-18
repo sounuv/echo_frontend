@@ -24,6 +24,7 @@ const Chat = () => {
   const [showTitle, setShowTitle] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isSending, setIsSending] = useState(false);
 
   const suggestions = [
     {
@@ -51,8 +52,12 @@ const Chat = () => {
   };
 
   const handleSendMessage = async () => {
+    if (isSending) return;
+
     const userMessageContent: string = newMessage.trim();
     if (!userMessageContent) return;
+
+    setIsSending(true);
 
     const updatedMessages: Message[] = [
       ...messages,
@@ -117,6 +122,7 @@ const Chat = () => {
       setErrorMessage("Seu token expirou. Logue novamente por favor");
     } finally {
       setIsLoading(false);
+      setIsSending(false);
     }
   };
 
@@ -183,6 +189,7 @@ const Chat = () => {
               value={newMessage}
               onChange={handleInputChange}
               onKeyDown={handleInputKeyDown}
+              disabled={isSending}
             />
             <Mic size={20} className="input-icon" />
           </div>

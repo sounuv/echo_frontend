@@ -56,6 +56,7 @@ export default function Login() {
 
       sessionStorage.setItem("token", token);
       sessionStorage.setItem("isAdmin", isAdmin);
+      sessionStorage.setItem("isAuthenticated", "true");
 
       setSuccess(true);
       setTimeout(() => {

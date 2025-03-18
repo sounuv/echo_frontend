@@ -8,48 +8,65 @@ interface AlertProps {
 
 const Alert: React.FC<AlertProps> = ({ message }) => {
   const router = useRouter();
+
   const handleLoginRedirect = () => {
     router.push("/");
   };
 
   return (
-    <div
-      style={{
-        backgroundColor: "#e63946",
-        color: "#ffff",
-        fontWeight: "bold",
-        borderRadius: "1rem",
-        padding: "10px",
-        paddingBottom: "10px",
-        width: "30%",
-        flexDirection: "column",
-        alignItems: "center",
-        position: "fixed",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        justifyContent: "center",
-      }}
-    >
-      <span style={{ marginBottom: "10px", display: "block", width: "100%" }}>
-        {message}
-      </span>
-      <button
-        onClick={handleLoginRedirect}
+    <>
+      {/* Overlay incorporado */}
+      <div
         style={{
-          backgroundColor: "#333",
-          color: "#fff",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          backgroundColor: "rgba(0, 0, 0, 0.7)",
+          zIndex: 1000,
+        }}
+      ></div>
+      {/* Alerta */}
+      <div
+        style={{
+          backgroundColor: "#fff",
+          color: "#000",
           fontWeight: "bold",
-          padding: "8px",
           borderRadius: "1rem",
-          border: "none",
-          cursor: "pointer",
+          padding: "15px",
+          width: "30%",
+          flexDirection: "column",
+          alignItems: "center",
+          position: "fixed",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
           justifyContent: "center",
+          zIndex: 1001,
         }}
       >
-        Fazer login novamente
-      </button>
-    </div>
+        <span style={{ marginBottom: "10px", display: "block", width: "100%" }}>
+          {message}
+        </span>
+        <button
+          onClick={handleLoginRedirect}
+          style={{
+            backgroundColor: "#333",
+            color: "#fff",
+            fontWeight: "bold",
+            width: "auto",
+            padding: "0.5rem 1rem",
+            borderRadius: "1rem",
+            border: "none",
+            cursor: "pointer",
+            textAlign: "center",
+          }}
+        >
+          Fazer login novamente
+        </button>
+      </div>
+    </>
   );
 };
 

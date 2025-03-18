@@ -14,13 +14,26 @@ export default function Home() {
     { id: 1, name: "Usuário 1" },
     { id: 2, name: "Usuário 2" },
   ]);
+
   const [profileImage, setProfileImage] = useState("./user.png");
   const router = useRouter();
 
   useEffect(() => {
     const storedIsAdmin = sessionStorage.getItem("isAdmin") === "true";
     setIsAdmin(storedIsAdmin);
-  }, []);
+    const isAuthenticated = sessionStorage.getItem("isAuthenticated");
+    if (!isAuthenticated) {
+      router.push("/");
+    } else {
+      const storedIsAdmin = sessionStorage.getItem("isAdmin") === "true";
+      setIsAdmin(storedIsAdmin);
+
+      const storedImage = localStorage.getItem("profileImage");
+      if (storedImage) {
+        setProfileImage(storedImage);
+      }
+    }
+  }, [router]);
 
   useEffect(() => {
     const storedImage = localStorage.getItem("profileImage");
@@ -96,6 +109,7 @@ export default function Home() {
             <div
               className="dropdown-item"
               onClick={() => {
+                sessionStorage.removeItem("isAuthenticated");
                 router.push("/");
                 setDropdownOpen(false);
               }}
